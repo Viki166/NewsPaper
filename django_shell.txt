@@ -1,0 +1,54 @@
+from django.contrib.auth.models import User
+from news.models import Author, Category, PostCategory, Post, Comment
+1.
+user_1 = User.objects.create_user(username='John')
+user_2 = User.objects.create_user(username='Lean')
+2.
+author_1=Author.objects.create(author=user_1)
+author_2=Author.objects.create(author=user_2)
+3.
+category_1=Category.objects.create(name_of_category='Политика')
+category_2=Category.objects.create(name_of_category='Экономика')
+category_3=Category.objects.create(name_of_category='Наука')
+category_4=Category.objects.create(name_of_category='Спорт')
+4.
+post_1= Post.objects.create(author=author_1, article_or_news= Post.ARTICLE, header='Эксперт оценил запрет на ввоз из Украины деталей для ж/д транспорта',post_text = 'Россию из-за запрета на ввоз из Украины не ожидает дефицита железнодорожных колес на фоне падающих рынков производства и ремонта грузовых вагонов, сообщил РИА Новости заместитель гендиректора Института проблем естественных монополий (ИПЕМ) Владимир Савчук.')
+post_2= Post.objects.create(author=author_2, article_or_news= Post.ARTICLE, header='В Калининграде рассказали о ситуации после приостановки транзита газа', post_text='Приостановка транзита российского газа через Литву не имеет негативного влияния на потребителей Калининградской области, в регионе организованы надежные и стабильные поставки газа, заявил зампредседателя правительства области Александр Рольбинов.')
+post_3=Post.objects.create(author=author_2, article_or_news=Post.NEWS, header='Российские биатлонисты получили новые комбинезоны для ЧМ в Словении', post_text='Российские биатлонисты получили новую экипировку, в которой будут выступать на чемпионате мира в Словении, сообщил РИА Новости главный тренер национальной команды Валерий Польховский.')
+
+5.
+post_1.category.add(category_1,category_2)
+post_1.save()
+post_2.category.add(category_2,category_3)
+post_2.save()
+post_3.category.add(category_3,category_4)
+post_3.save()
+
+6.
+comment_1 =Comment.objects.create(author=user_2,post=post_1, comment_text='Текст комментария 1')
+comment_2=Comment.objects.create(author=user_1,post=post_2, comment_text='Текст комментария 2')
+comment_3=Comment.objects.create(author=user_1,post=post_1, comment_3.comment_text='Текст комментария 3')
+comment_4=Comment.objects.create(author=user_1,post=post_3, comment_text='Текст комментария 4')
+comment_5=Comment.objects.create(author=user_2,post=post_3, comment_text='Текст комментария 5')
+
+7.
+post_1.like() (2 раза)
+post_2.dislike() (2 раза)
+post_3.like()
+post_1.save()
+post_2.save()
+post_3.save()
+comment_1.like() (3 раза)
+comment_2.like()
+comment_3.dislike()
+comment_4.like() (5 раз)
+comment_5.like()  (2 раза)
+comment_1.save()
+comment_2.save()
+comment_3.save()
+comment_4.save()
+comment_5.save()
+
+
+
+9.
