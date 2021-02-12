@@ -6,12 +6,15 @@ class Author(models.Model):
     rating_author = models.IntegerField('рейтинг пользователя', default=0)
     author = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['author']
+
     def update_rating(self):
         sum = 0
-        sum_rating_article = Post.objects.filter(author=Author.author, article_or_news=1).values('author','post_rating')
+        sum_rating_article = Post.objects.filter(author=self.id, article_or_news=1).values('author', 'post_rating')
         for i in sum_rating_article:
             sum = i['post_rating'] * 3
-        sum_rating_comment = Comment.objects.filter(author=Author.author).values('author', 'rating_comment')
+        sum_rating_comment = Comment.objects.filter(author=self.id).values('author', 'rating_comment')
         for j in sum_rating_comment:
             sum = sum + j['rating_comment']
         self.rating_author = sum

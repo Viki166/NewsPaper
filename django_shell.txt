@@ -27,7 +27,7 @@ post_3.save()
 6.
 comment_1 =Comment.objects.create(author=user_2,post=post_1, comment_text='Текст комментария 1')
 comment_2=Comment.objects.create(author=user_1,post=post_2, comment_text='Текст комментария 2')
-comment_3=Comment.objects.create(author=user_1,post=post_1, comment_3.comment_text='Текст комментария 3')
+comment_3=Comment.objects.create(author=user_1,post=post_1, comment_text='Текст комментария 3')
 comment_4=Comment.objects.create(author=user_1,post=post_3, comment_text='Текст комментария 4')
 comment_5=Comment.objects.create(author=user_2,post=post_3, comment_text='Текст комментария 5')
 
@@ -49,6 +49,23 @@ comment_3.save()
 comment_4.save()
 comment_5.save()
 
-
+8.
+author_1.update_rating()
+author_1.rating_author
+author_2.update_rating()
+author_2.rating_author
 
 9.
+author_1.author
+author_1.author_rating
+Author.objects.all().order_by('-rating_author').values('author','rating_author')[0]
+
+10.
+best_article=Post.objects.all().filter(article_or_news=1).order_by('-post_rating').values('date_of_creation_post','auth
+or','post_rating','header')[0]
+best_article["date_of_creation_post"]=  best_article["date_of_creation_post"].strftime("%A, %d. %B %Y %I:%M%p")
+
+11.
+article = Post.objects.all().filter(article_or_news=1).order_by('-post_rating')[0]
+
+comments= Comment.objects.all().filter(post=article).values('date_of_creation_comment','author','rating_comment','comment_text')
