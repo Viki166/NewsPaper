@@ -1,0 +1,16 @@
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет News -->
+{% block title %}
+News
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим новость -->
+{% block content %}
+<h1>{{ post.header }}</h1>
+<p>Дата публикации: {{ post.date_of_creation_post |date:'d M Y H:i'}}</p>
+<p>{{ post.post_text }}</p>
+<p>Автор: {{ post.author.author }}</p>
+
+
+{% endblock content %}

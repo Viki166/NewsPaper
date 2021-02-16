@@ -61,10 +61,9 @@ author_1.author_rating
 Author.objects.all().order_by('-rating_author').values('author','rating_author')[0]
 
 10.
-best_article=Post.objects.all().filter(article_or_news=1).order_by('-post_rating').values('date_of_creation_post','auth
-or','post_rating','header')[0]
+best_article=Post.objects.all().filter(article_or_news=1).order_by('-post_rating').values('date_of_creation_post','author','post_rating','header')[0]
 best_article["date_of_creation_post"]=  best_article["date_of_creation_post"].strftime("%A, %d. %B %Y %I:%M%p")
-
+post_1.preview()
 11.
 article = Post.objects.all().filter(article_or_news=1).order_by('-post_rating')[0]
 
