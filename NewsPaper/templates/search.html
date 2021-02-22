@@ -1,0 +1,112 @@
+{% extends 'flatpages/default.html' %}
+{% load Censor %}
+<!-- Название у нас будет news -->
+{% block title %}
+News
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все новости -->
+{% block content %}
+<form method="GET">
+    {{ filter.form }}
+    <input type="submit" value="Найти">
+</form>
+<h1>Новости:</h1><br>
+
+{% if posts %}
+     <table>
+        <tr>
+            <td>
+                Заголовок
+            </td>
+            <td>
+                Дата публикации
+            </td>
+            <td>
+                Текст новости
+            </td>
+            <td>
+                Автор
+            </td>
+        </tr>
+
+    {% for post in filter.qs %}
+    <tr>
+        <td>
+            {{ post.header |censor:'***' }}
+        </td>
+        <td>
+            {{post.date_of_creation_post |date:'d M Y H:i'}}
+        </td>
+        <td>
+            {% if post.article_or_news == '1' %}
+                {{ post.post_text |censor:'***'|truncatechars:50  }}
+            {% else %}
+                {{ post.post_text |censor:'***'}}
+            {% endif %}
+        </td>
+        <td>
+            {{ post.author.author }}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <h2>Новостей нет!</h2>
+{% endif %}
+{% if is_paginated %}
+<!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+    {% if page_obj.has_previous %}
+        <a href="?page=1">Предыдущая</a>
+        <a href="?page={{ page_obj.previous_page_number }}"><</a>
+    {% endif %}
+
+<!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a>{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+<!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">></a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Следующая</a>
+    {% endif %}
+
+{% endif %}
+<form method="POST">
+{% csrf_token %}
+<select name="author" size="2">
+   {% for author in authors %}
+<option value="{{author.id}}">
+    {{author.author}}
+</option>
+    {% endfor %}
+</select>
+<select name="article_or_news" size="2">
+   {% for article_or_news in article_news %}
+<option value="{{article_or_news.id}}">
+    {{ article_or_news }}
+</option>
+    {% endfor %}
+</select>
+<!--<label for="">Статья или новость</label>-->
+<!--<input name="article_or_news" type="text">-->
+<label for="header">Заголовок</label>
+<input name="header" type="text">
+<label for="post_text">Текст статьи или новости</label>
+<textarea name="post_text" type="text" rows="4"></textarea>
+<!-- Здесь будет список категорий.  -->
+<select name="category" size="4">
+  {% for category in categories %}
+    <option value="{{ category.id }}">
+        {{ category.name_of_category }}
+    </option>
+  {% endfor %}
+</select>
+<input type="submit" value="Добавить">
+</form>
+{% endblock content %}

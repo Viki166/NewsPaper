@@ -31,16 +31,16 @@ News
     {% for post in posts %}
         <tr>
             <td>
-                {{ post.header |censor:'***' }}
+                {{ post.header |censor:"***"}}
             </td>
             <td>
                 {{post.date_of_creation_post |date:'d M Y H:i'}}
             </td>
             <td>
                 {% if post.article_or_news == '1' %}
-                    {{ post.post_text |censor:'***'|truncatechars:50  }}
+                    {{ post.post_text |censor:"***"|truncatechars:50 }}
                 {% else %}
-                    {{ post.post_text |censor:'***'}}
+                    {{ post.post_text |censor:"***" }}
                 {% endif %}
             </td>
             <td>

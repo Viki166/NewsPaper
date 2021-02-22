@@ -21,7 +21,7 @@ class Category(models.Model):
     name_of_category = models.CharField('название категории', max_length=100, unique=True)
 
     def __str__(self):
-        return self.name_of_category
+        return f'{self.name_of_category}'
 
 
 class Post(models.Model):
@@ -32,18 +32,18 @@ class Post(models.Model):
         (ARTICLE, 'Article'),
         (NEWS, 'News'),
     )
-    article_or_news = models.CharField('поле с выбором - статья или новость',
+    article_or_news = models.CharField(verbose_name='поле с выбором - статья или новость',
                                        max_length=1, choices=CHOICE,
                                        default=ARTICLE)
-    date_of_creation_post = models.DateTimeField('дата и время создания', auto_now_add=True)
-    header = models.CharField('заголовок статьи или новости', max_length=200)
-    post_text = models.TextField('текст статьи или новости')
-    post_rating = models.IntegerField('рейтинг статьи или новости', default=0)
-    category = models.ManyToManyField(Category, through='PostCategory', null=True, blank=True)
+    date_of_creation_post = models.DateTimeField(verbose_name='дата и время создания', auto_now_add=True)
+    header = models.CharField(verbose_name='заголовок статьи или новости', max_length=200)
+    post_text = models.TextField(verbose_name='текст статьи или новости')
+    post_rating = models.IntegerField(verbose_name='рейтинг статьи или новости', default=0)
+    category = models.ManyToManyField(Category, through='PostCategory', blank=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.header
+        return f'{self.header}'
 
     def preview(self):
         text_len = 124
