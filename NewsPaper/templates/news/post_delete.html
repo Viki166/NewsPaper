@@ -1,0 +1,52 @@
+{% extends 'flatpages/default.html' %}
+{% load Censor %}
+<!-- Название у нас будет news -->
+{% block title %}
+News
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все новости -->
+{% block content %}
+<h1>Вы действительно хотите удалить новость?</h1><br>
+     <table>
+        <tr>
+            <td>
+                Заголовок
+            </td>
+            <td>
+                Дата публикации
+            </td>
+            <td>
+                Текст новости
+            </td>
+            <td>
+                Автор
+            </td>
+        </tr>
+
+    <tr>
+        <td>
+            {{ post.header |censor:'***' }}
+        </td>
+        <td>
+            {{post.date_of_creation_post |date:'d M Y H:i'}}
+        </td>
+        <td>
+            {% if post.article_or_news == '1' %}
+                {{ post.post_text |censor:'***'|truncatechars:50  }}
+            {% else %}
+                {{ post.post_text |censor:'***'}}
+            {% endif %}
+        </td>
+        <td>
+            {{ post.author.author }}
+        </td>
+    </tr>
+    </table>
+
+<form method="POST">
+{% csrf_token %}
+{{ form }}
+<input type="submit" value="Удалить">
+</form>
+{% endblock content %}

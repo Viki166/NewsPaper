@@ -39,11 +39,14 @@ class Post(models.Model):
     header = models.CharField(verbose_name='заголовок статьи или новости', max_length=200)
     post_text = models.TextField(verbose_name='текст статьи или новости')
     post_rating = models.IntegerField(verbose_name='рейтинг статьи или новости', default=0)
-    category = models.ManyToManyField(Category, through='PostCategory', blank=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category, through='PostCategory', blank=True, verbose_name='Категория')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
 
     def __str__(self):
         return f'{self.header}'
+
+    def get_absolute_url(self):
+        return f'/news/{self.id}'
 
     def preview(self):
         text_len = 124

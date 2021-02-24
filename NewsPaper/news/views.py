@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from .models import Post, Category, Author
 from django.views import View
 from django.core.paginator import Paginator
 from .filters import PostFilter
+from .forms import PostForm
 
 
 class PostsList(ListView):
@@ -24,24 +25,20 @@ class SearchList(ListView):
     template_name = 'search.html'
     context_object_name = 'posts'
     ordering = ['-id']
+    form_class = PostForm
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
         context['categories'] = Category.objects.all()
-        context['authors'] = Author.objects.all()
-        context['article_news'] = Post.CHOICE
+        context['form'] = PostForm()
         return context
 
     def post(self, request, *args, **kwargs):
-        author_id = request.POST['author']
-        article_or_news = request.POST['article_or_news']
-        header = request.POST['header']
-        post_text = request.POST['post_text']
-        category_id = request.POST['category']
-        post = Post(author_id=author_id, article_or_news=article_or_news, header= header, post_text = post_text, category_id=category_id)
-        post.save()
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
         return super().get(request, *args, **kwargs)
 
 
@@ -56,4 +53,26 @@ class Posts(View):
         return render(request, 'search.html', data)
 
 
+class PostDetailView(DetailView):
+    template_name = 'news/post_detail.html'
+    queryset = Post.objects.all()
 
+
+class PostCreateView(CreateView):
+    template_name = 'news/post_create.html'
+    form_class = PostForm
+
+
+class PostUpdateView(UpdateView):
+    template_name = 'news/post_create.html'
+    form_class = PostForm
+
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Post.objects.get(pk=id)
+
+
+class PostDeleteView(DeleteView):
+    template_name = 'news/post_delete.html'
+    queryset = Post.objects.all()
+    success_url = '/news/search/'

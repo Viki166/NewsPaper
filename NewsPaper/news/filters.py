@@ -6,6 +6,5 @@ class PostFilter(FilterSet):
     class Meta:
         model = Post
         fields = {'date_of_creation_post': ['gt'],
-                  'header': ['exact'],
                   'author': ['exact'],
                   }
