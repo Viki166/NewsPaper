@@ -32,9 +32,12 @@ News
     {% for post in filter.qs %}
     <tr>
         <td>
-            <a href="{% url 'post_detail' post.id %}">{{ post.header|title|censor:'***' }}</a>
-            <a href="{% url 'post_update' post.id %}"><u>Редактировать</u></a>
-            <a href="{% url 'post_delete' post.id %}"><u> Удалить </u></a>
+            <a style="color:#16181b" href="{% url 'post_detail' post.id %}">{{ post.header|title|censor:'***' }}</a>
+
+                <br><a href="{% url 'post_update' post.id %}"><u>Редактировать</u></a>
+
+
+            <br><a href="{% url 'post_delete' post.id %}"><u> Удалить </u></a>
         </td>
         <td>
             {{post.date_of_creation_post |date:'d M Y H:i'}}
