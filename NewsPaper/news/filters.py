@@ -8,3 +8,5 @@ class PostFilter(FilterSet):
         fields = {'date_of_creation_post': ['gt'],
                   'author': ['exact'],
                   }
+
+

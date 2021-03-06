@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Author(models.Model):
-    rating_author = models.IntegerField('рейтинг пользователя', default=0)
+    rating_author = models.IntegerField(verbose_name='рейтинг пользователя', default=0)
     author = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def update_rating(self):
@@ -18,7 +18,7 @@ class Author(models.Model):
 
 
 class Category(models.Model):
-    name_of_category = models.CharField('название категории', max_length=100, unique=True)
+    name_of_category = models.CharField(verbose_name='название категории', max_length=100, unique=True)
 
     def __str__(self):
         return f'{self.name_of_category}'
@@ -71,8 +71,8 @@ class PostCategory(models.Model):
 
 
 class Comment(models.Model):
-    comment_text = models.TextField('текст комментария', max_length=500)
-    date_of_creation_comment = models.DateTimeField('дата и время создания комментария', auto_now_add=True)
+    comment_text = models.TextField(verbose_name='текст комментария', max_length=500)
+    date_of_creation_comment = models.DateTimeField(verbose_name='дата и время создания комментария', auto_now_add=True)
     rating_comment = models.IntegerField('рейтинг комментария', default=0)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)

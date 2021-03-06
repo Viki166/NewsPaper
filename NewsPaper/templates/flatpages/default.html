@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load auth_extras %}
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -34,15 +34,6 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/news/1">Новость 1</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/news/2">Новость 2</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/news/3">Новость 3</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="/news/search">Сортировать новости</a>
           </li>
         </ul>
@@ -55,11 +46,18 @@
           {% else %}
             <a href="{% url 'register' %}">Register</a> | <a href="{% url 'user_login' %}">Login</a>
           {% endif %}
+          <div>
+            {% if request.user.is_authenticated %}
+            {% if not request.user|has_group:'authors' %}
+              <button style="background-color:rgba(151, 178, 209, 0.3)"><a href="upgrade/"> Стать автором </a></button>
+            {% elif request.user|has_group:'common' and request.user|has_group:'authors' %}
+               <button style="display: none">Стать автором</button>
+            {%else %}
+              <button style="display: none">Стать автором</button>
+            {% endif %}
+            {% endif %}
+          </div>
         </span>
-<!--Кнопка Стать автором  -->
-              {% if is_not_author %}
-            <button> <a href="login/upgrade/"> Стать автором!</a> </button>
-              {% endif %}
           </nav>
 
 
