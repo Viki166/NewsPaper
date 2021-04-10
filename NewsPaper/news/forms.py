@@ -5,10 +5,6 @@ from django.contrib.auth.models import User
 from django import forms
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 99ebd7cb09ca4943fc2dfaa467fc247267826d28
 class PostForm(ModelForm):  # форма для создания новости
     # в класс мета как обычно надо написать модель по которой будет строится форма и нужные нам поля. Мы уже делали что-то похожее с фильтрами.
     class Meta:

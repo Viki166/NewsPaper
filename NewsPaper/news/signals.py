@@ -18,17 +18,5 @@ from .views import Mailing
 #     msg.send()
 
 
-<<<<<<< HEAD
-
-=======
-@receiver(post_delete, sender=Appointment)
-def notify_managers_appointment_canceled(sender, instance, **kwargs):
-    subject = f'{instance.client_name} has canceled his appointment! '
-    mail_managers(
-        subject=subject,
-        message=f'Canceled appointment for {instance.date.strftime("%d %m %Y")}',
-    )
-    print(subject)
->>>>>>> 99ebd7cb09ca4943fc2dfaa467fc247267826d28
 
 
