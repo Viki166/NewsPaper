@@ -28,7 +28,7 @@ SECRET_KEY = 'iz89n@i1_@4=mh8t%aaqvd2j#-i3h(dv$rc5jiv9fcpxfj9u^g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1']  # локальный адрес сервера
 
 # Application definition
 
@@ -39,17 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'news',
+    #'news',
+    'news.apps.NewsConfig',  # переопределяем путь
     'django_filters',
     'django.contrib.sites',
     'django.contrib.flatpages',
+
+    "django_apscheduler",
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+
 ]
 SITE_ID = 1
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
+
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -67,7 +73,7 @@ ROOT_URLCONF = 'NewsPaper.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # искать шаблоны в соответствующей дирректории
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,7 +86,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -131,14 +136,54 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 LOGIN_URL = login_required(login_url='/accounts/login/')
 LOGIN_REDIRECT_URL = '/news/search/'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = True  # требуется адрес почты для учетной записи
+ACCOUNT_UNIQUE_EMAIL = True # почта должна быть уникальной
+ACCOUNT_USERNAME_REQUIRED = False  # требуется имя пользователя учетной записи
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # метод аутентификации аккаунта
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # подтверждение почты аккаунта
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'bobby.loner27@gmail.com'
+EMAIL_HOST_PASSWORD = 'green7688'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+MANAGERS = [
+    ('Viki', 'viki49661@gmail.com'),
+]
+SERVER_EMAIL = 'bobby.loner27@gmail.ru'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+
+# Строка формата для отображения отметок времени выполнения на сайте администратора Django. Значение по умолчанию
+# просто добавляет секунды к стандартному формату Django, который полезен для отображения временных меток
+# для заданий, которые запланированы для выполнения с интервалами менее одной минуты.
+#
+# См. Https://docs.djangoproject.com/en/dev/ref/settings/#datetime-format для форматной строки
+# подробностей синтаксиса.
+APSCHEDULER_DATETIME_FORMAT  =  "N j, Y, f: s a"
+
+# Максимальное время выполнения, разрешенное для заданий, которые запускаются вручную через сайт администратора Django, что
+# предотвращает истечение времени ожидания HTTP-запросов админского сайта.
+#
+# Более длительные задания, вероятно, следует передать библиотеке обработки фоновых задач
+#, которая вместо этого поддерживает несколько фоновых рабочих процессов (например, Dramatiq, Celery, Django-RQ,
+# и т. Д. См .: https://djangopackages.org/grids/g / worker-queues-tasks / для популярных вариантов).
+APSCHEDULER_RUN_NOW_TIMEOUT  =  25   # секунд
+
+WSGI_APPLICATION = 'NewsPaper.wsgi.application'
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
+        'TIMEOUT': 300,
+    }
+}
