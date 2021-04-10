@@ -1,0 +1,37 @@
+{% extends 'flatpages/default.html' %}
+{% load Censor %}
+<!-- Название у нас будет news -->
+{% block title %}
+News
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все новости -->
+{% block content %}
+<h2>Новость:</h2><br>
+<h3> {{ post.header |censor:'***'|title }}</h3>
+<p>{{post.date_of_creation_post |date:'d M Y H:i'}}</p>
+<p>
+    {% if post.article_or_news == '1' %}
+    {{ post.post_text |censor:'***'  }}
+    {% else %}
+    {{ post.post_text |censor:'***' }}
+    {% endif %}
+</p>
+<div>
+    {% for category in post.category.all %}
+    Категория: {{ category }}
+    {% if user.is_authenticated %}
+     <form action="{% url 'subscribe' category.id %}" method="POST">
+     {% csrf_token %}
+        <button type="submit" name="category_id" class="btn btn-info" value="{{ category.id }}" style="font-size:11px">Подписаться</button>
+<!--        <button type="submit" name="category_id" class="btn btn-info " value="{{ category.id }}" style="font-size:11px">Отписаться</button>-->
+
+     </form>
+    {% endif %}
+    {% endfor %}
+</div>
+<br><div>Автор: {{ post.author.author }}</div>
+
+
+{% endblock content %}
+
