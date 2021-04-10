@@ -33,9 +33,9 @@ News
         </td>
         <td>
             {% if post.article_or_news == '1' %}
-                {{ post.post_text |censor:'***'|truncatechars:50  }}
+                {{ post.post_text |censor:'***' }}
             {% else %}
-                {{ post.post_text |censor:'***'}}
+                {{ post.post_text |censor:'***' }}
             {% endif %}
         </td>
         <td>

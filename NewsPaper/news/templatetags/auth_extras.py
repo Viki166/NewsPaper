@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.auth.models import Group
 
-register = template.Library()
+register = template.Library()  # если мы не зарегистрируем наши фильтры, то Django никогда не узнает, где именно их искать и фильтры потеряются
 
 
 @register.filter(name='has_group')
